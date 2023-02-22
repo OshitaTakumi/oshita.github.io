@@ -1,6 +1,5 @@
-theme = "ananke"
 baseURL = "https://oshita.github.io/"
-title = "My New Hugo Site"
-canonifyurls: true
-DefaultContentLanguage: "ja"
-languageCode: "ja-jp"
+canonifyurls = true
+title = "Web Site"
+theme = "ananke"
+
