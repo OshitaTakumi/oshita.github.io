@@ -1,4 +1,6 @@
 theme = "ananke"
 baseURL = "https://oshita.github.io/"
-languageCode = "en-us"
 title = "My New Hugo Site"
+canonifyurls: true
+DefaultContentLanguage: "ja"
+languageCode: "ja-jp"
