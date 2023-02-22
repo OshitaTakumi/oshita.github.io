@@ -1,4 +1,4 @@
 theme = "ananke"
-baseURL = "https://oshitatakumi.github.io/"
+baseURL = "https://oshita.github.io/"
 languageCode = "en-us"
 title = "My New Hugo Site"
