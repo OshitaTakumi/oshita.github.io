@@ -32,7 +32,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY}}
-          publish_dir: ./public
+          publish_dir: /home/oshita/homepage/osttkm.github.io/public
           cname: oshita.com
 
           
