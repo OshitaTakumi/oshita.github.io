@@ -1,5 +1,5 @@
-baseURL = "https://oshita.github.io/"
 canonifyurls = true
+baseURL = "http://example.org/"
 title = "Web Site"
 theme = "ananke"
 
