@@ -1,5 +1,5 @@
-canonifyurls = true
-baseURL = "http://example.org/"
+baseURL = "http://oshita.github.io/"
 title = "Web Site"
 theme = "ananke"
+canonifyurls = true
 
