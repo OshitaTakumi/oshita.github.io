@@ -35,7 +35,7 @@ jobs:
           external_repository: Oshita Takumi/oshita.github.io
           publish_branch: master
           cname: oshita.com
-  - name: github pages
+  - name: yarn install
     env:
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     run: |
