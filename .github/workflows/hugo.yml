@@ -1,4 +1,15 @@
-name: github pages
+-name: github pages
+# ssh接続のための接続
+      env:
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+        chmod 700 ~/.ssh/id_rsa
+        eval $(ssh-agent -s)
+        ssh-add ~/.ssh/id_rsa
+        ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+        yarn install
 
 on:
   push:
@@ -35,3 +46,4 @@ jobs:
           external_repository: Oshita Takumi/oshita.github.io
           publish_branch: master
           cname: oshita.com
+  
