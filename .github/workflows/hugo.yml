@@ -31,9 +31,8 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          deploy_key: ${{ secrets.LAPTOP_KEY }}
-          external_repository: oshita.github.io
-          publish_branch: master
+          deploy_key: ${{ secrets.PRIVATE_KEY }}
+          publish_dir: ./public
           cname: oshita.com
 
           
