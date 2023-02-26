@@ -1,6 +1,5 @@
 baseURL = "http://osttkm.github.io/"
 title = "Web Site"
-theme = "ananke"
 publishDir = "docs"  # この行を追加
 canonifyurls = true
 
