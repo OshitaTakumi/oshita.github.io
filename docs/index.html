@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<script src="https://kit.fontawesome.com/77682394ec.js" crossorigin="anonymous"></script>
+
 <meta charset="UTF-8">
 <title>Lab. page </title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,8 +15,15 @@
 <header>
 <div id="logo">
 <h1><a href="index.html"><img src="images/my_logo.png" alt="Lab. blog"></a></h1>
-<!-- <p align="center">自己紹介，論文のサマリー等のログ管理ブログ<size=-100></p> -->
 </div>
+<!-- /id logo -->
+
+<div id="icon">
+<i class="fa fa-square-envelope fa-3x fa-fw" data-fa-transform="shrink-8 up-8"></i>
+<a href="https://github.com/osttkm" ><i class="fa fa-github fa-3x fa-fw"></i></a>
+</div>
+<!-- /id logo -->
+
 
 <div id="mainimg">
 	<!--背景で動画を動かしたいならこんな感じ-->
@@ -97,9 +106,10 @@
 	</ul>
 	</div>
 	<!--/.sub-->
-	
 	</div>
 	<!--/.c2-->
+
+	
 
 
 <section class="bg1">
@@ -107,14 +117,17 @@
 <h2>Topics</h2>
 
 <div class="list-container">
-
 <div class="list blur">
 <figure><img src="images/sample1.jpg" alt=""></figure>
 <div class="text">
-<h4>Sample Title</h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
+<h4>就活情報</h4>
+<p>個人用ページ，閲覧無用</p>
 </div>
-<span class="new">NEW</span>
+<script src="js/lock.js"></script>
+<div>
+	<p class="btn" onclick="gate();"><a>Log in</a></p>
+</div>
+<span class="new">NEW</span> 
 </div>
 
 <div class="list blur">
@@ -177,6 +190,7 @@
 
 <!--ページの上部へ戻るボタン-->
 <div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
 
 </body>
 </html>
