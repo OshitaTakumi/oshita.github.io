@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>学部三年時研究</title>
+<title>paper title 要約</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="ここにサイト説明を入れます">
-<link rel="stylesheet" href="css/style.css">
+<meta name="description" content="Focal Loss for Dense Object Detection 要約">
+<link rel="stylesheet" href="../../style.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
 <header>
 
 <div id="logo">
-<h1><a href="index.html"><img src="images/logo.png" alt="SAMPLE COMPANY"></a></h1>
+<h1><a href="index.html"><img src="images/logo.png" alt="Focal Loss for Dense Object Detection"></a></h1>
 </div>
 
 </header>
@@ -56,56 +56,39 @@
 
 <section>
 
-<h2>Service</h2>
-<p>ブロック全体を囲んでいる「list-container」タグを入れ忘れないで下さい。これがないとレイアウトが崩れます。<br>
-出現してくるアニメーションは他にも色々ご用意しております。テンプレート内の<a href="sample_inview.html">sample_inview.htmlをお読み下さい。</a></p>
+<h2>論文</h2>
+<p>・ Year ： 2018<br>
+	・ <a href="https://arxiv.org/abs/1708.02002">リンク</a><br> 
+	・ <a href="https://github.com/facebookresearch/Detectron">github</a>
+</p>
 
-<div class="list-container">
+<h2>１．どんなものか</h2>
+<p>Object Detectionは１段階検出と２段階検出の２種類があり，１段階検出は今のところ後者に対して後れを取っている．
+	これはモデルの学習するデータである検出対象とそれ以外の背景において大きく不均衡が生じる．ことが原因であり，これに対して標準的なCEに対して精度よく分類された例の損失を小さくすることを提案．</p>
 
-<div class="list blur">
-<figure><img src="images/sample1.jpg" alt=""></figure>
-<div class="text">
-<h4>チューニング発表</h4>
-<p>研究室配属後初のタスク</p>
-</div>
-<p class="btn"><a href="service2.html">詳しくみる</a></p>
-</div>
+<h2>２．先行研究との差分</h2>
+<p>既存の損失関数，例えばHuber損失では大きな誤差を持つような識別が困難なデータ(hard sample)に対して重み付けし，外れ値の寄与を低減する物であった．<br>
+これに対して，Focal Lossでは，hard sampleの持つ損失に対して小さな重みを付けることで損失全体に対して損失値全体に対する寄与率を下げている．</p>
 
-<div class="list blur">
-<figure><img src="images/sample1.jpg" alt=""></figure>
-<div class="text">
-<h4>b3最終課題</h4>
-<p>PaDiMによる異常検知</p>
-</div>
-<p class="btn"><a href="service2.html">詳しくみる</a></p>
-</div>
+<h2>３．技術や研究のキモ</h2>
+<p>detectionに対する部分は省略，分類タスクに関する部分のみまとめる．
+<h3>2クラス分類想定の通常のCrossEntropy</h3>
+<img src="./ce.png" alt="Error">
+<h3>Focal loss</h3>
+<img src="./focal_loss.png" alt="Error">
+通常のCrossEntropyの式に対してγというハイパラを導入．正解クラスに対する予測確率が大きいようなデータのロスを下げる．
+またαはしばしば不均衡対策として損失関数に用いられるパラメータ．よくあるケースとしては各クラスのデータ数の逆数に設定される．
+</p>
 
+<h2>４．有効性の証明</h2>
+<p><a href="https://www.semanticscholar.org/paper/Training-Region-Based-Object-Detectors-with-Online-Shrivastava-Gupta/63333669bcf694aba2e1928f6060ab1d6a5161fe?p2df">online hard example mining(OHEM)手法</a>
+	による評価及び，COCOに対する実験で証明．</p>
 
-</div>
-<!--/.list-container-->
+<h2>５．議論</h2>	
+
 
 </section>
 
-<section class="bg1">
-
-<h2>Service</h2>
-
-<div class="list-container">
-
-
-<div class="list blur">
-<figure><img src="images/sample1.jpg" alt=""></figure>
-<div class="text">
-<h4>関連論文</h4>
-<p>PaDiM: a Patch Distribution Modeling Framework for Anomaly Detection and Localization</p>
-</div>
-<p class="btn"><a href="paper/paper_template.html">詳しくみる</a></p>
-</div>
-
-</div>
-<!--/.list-container-->
-
-</section>
 
 </main>
 
