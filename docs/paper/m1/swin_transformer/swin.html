@@ -12,10 +12,9 @@
 </script>
 
 <meta charset="UTF-8">
-<title>prism 要約</title>
+<title>Swin Transformer 要約</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="PRISM: A Rich Class of Parameterized Submodular Information Measures for
-Guided Subset Selection 要約">
+<meta name="description" content="Swin Transformer: Hierarchical Vision Transformer using Shifted Windows 要約">
 <link rel="stylesheet" href="../../style.css">
 </head>
 
@@ -26,7 +25,7 @@ Guided Subset Selection 要約">
 <header>
 
 <div id="logo">
-<h1><a href="index.html"><img src="images/logo.png" alt="PRISM"></a></h1>
+<h1><a href="index.html"><img src="images/logo.png" alt="swin"></a></h1>
 </div>
 
 </header>
@@ -74,43 +73,44 @@ Guided Subset Selection 要約">
 </p>
 
 <h2>１．どんなものか</h2>
-<p>データセットのきょだいかやそれに伴うモダリティの細分化から，特定のせいしつにたいして特化したデータサブセットを効率的に選択する技術の必要性はより増している．
-	この問題に対してPIRSMをさまざまな劣モジュラ情報測定のインスタンス化とパラメータ化により定義してクエリ集合との関連性，プライベート集合との比関連性，選択されたデータ点間の多様性
-	など様々な重要な要素のモデル化を可能にする．また，要素間のパラメータのトレードオフについても考察
+<p>言語から視覚へのtransformerの適応には<br>
+	・視覚的実体のスケールの大きな変化<br>
+	・テキスト中の単語と対応する画像の解像度との差から生じる計算の困難性<br>
+	などの２つのドメインの違いから生じる問題が課題である．
+	この問題に対して表現がshifted windowsで計算される階層的transformerを提案している．
 </p>
 
 <h2>２．先行研究との差分</h2>
-<p>能動学習や学習の高速化の分野が関連研究として挙げられる．これに対してPRISMの目的は「要約」である．過去の研究例としてテキスト，動画要約についてクエリあり，なしでそれぞれ関連研究が存在する．
-	PRISMは要約の異なる趣旨に対して統一的な処理を提供する最初の試み．
+<p>今までのtransformerはself-attensionの計算量が二次関数に従うため，高解像度画像を用いたピクセル単位のタスクにおいては
+	計算量の観点から実現不可能だった．<br>
+	これに対して，swin transformerは階層的特徴マップを構築することで画像サイズに対して線形な計算量で計算可能となった．<br>
+	階層的とは，transfirmerの深い層では隣接するパッチを徐々にマージして行くことを示す．これにより，特徴ピラミッドネットワークやU-NET等を容易に利用できる．
+
 </p>
 
 <h2>３．技術や研究のキモ</h2>
-<p>前提となる知識，要点について以下にまとめる．
-<h3>劣モジュラ関数</h3>
-基底集合V = {1,2,3,...,n}と関数f $2^v \longrightarrow R$について$f(j|X) ≧ f(j|Y), ∀X ⊆ Y ⊆ V, j∈Y$
-を満たすような部分集合が部分モジュラーである．
 
-<h3>サブモジュラー条件付き利得(CG):</h3>
-<p>集合A,P⊆Vが与えられたとき、CGであるf(A|P)はPにAを加えたときの関数値の増加分で$f(A|P)=f(A∪P)-f(P)$と表せる．
-	ここで直観的な判断としては，f(A|P)はAとPが互いにどれほど異なるかを測定するものである．
-</p>
+<h3>分離と統合</h3>
+<p>既存の研究で特徴抽出器と分類器を分ける問戦略は不均衡データに対する対策として広く用いられているが，
+	その後，共通の損失の逆伝播なしで両者を結合して共同モジュール間の相互作用を活用する．
+	３つのモジュールから構成されている全体像は以下の通り．<br>
+	<image src = "./cossl.png"></image></p>
 
-<h3>サブモジュラー情報量(MI):</h3>
-<p>集合A,Q⊆Vが与えられたとき、MIは$(A; Q) = f(A)+f(Q)-f(A∪Q)$と定義される．
-	直感的には、これはQとAの間の類似度を測定するものであり、Qはクエリセットである。
-</p>
+<h3>テールクラス特徴拡張(TFE)</h3>
+既存手法であるcRTに触発され，分類器学習モジュールを用いて分類器を学習させ，更にラベルなしデータを用いて分類器の精度向上を目指す．
+具体的にはmix match．式は以下の通り．<br>
+<image src = "./mixmatch.png">
 
-<h3>サブモジュラー条件付き相互情報(CMI)</h3>
-<p>CMIはCGとMIを用いて$(A; Q｜P) = f(A∪P) + f(Q∪P) - f(A∪Q∪P) - f(P)$と表される． 
-	直感的には、CMIは、AとQの相互類似度とPからの集団非類似度を共同でモデル化するものである．
-</p>
 
 <h2>４．有効性の証明</h2>
-<p><a href="https://www.semanticscholar.org/paper/Training-Region-Based-Object-Detectors-with-Online-Shrivastava-Gupta/63333669bcf694aba2e1928f6060ab1d6a5161fe?p2df">online hard example mining(OHEM)手法</a>
-	による評価及び，COCOに対する実験で証明．</p>
+cifar10-LT，cifar100-LT，FOOD101で実験を行い評価，ラベルありデータ，ラベルなしデータはcifar10ではそれぞれ1500:3000，cifar100では150,300．
+<img src="./cifar10-result.png">
+<img src="./cifar100-result.png">
+<igm src="'./food101.png">
+<p></p>
 
 <h2>５．議論</h2>	
-
+<p>データ分布が既知，未知の場合についての比較に関するあプレーションスタディあり.最後の方は正直よめてない</p>
 
 </section>
 
