@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>Data Cleansing for Deep Neural Networks with Storage-efficient Approximation of Influence Functions 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Data Cleansing for Deep Neural Networks with Storage-efficient Approximation of Influence Functions 要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="Data cleansing"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+<!-- <div class="sh">
+<p>※800px以下のメニュー開閉時にのみ表示させたい情報があればここ（shボックスの中）に入れて下さい。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。</p>
+</div> -->
+<!--/.sh-->
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： ECCV2018<br>
+	・ <a href="https://arxiv.org/abs/1808.01097">リンク</a><br> 
+	・ <a href="https://github.com/msight-tech/research-curriculumnet">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	data cleansingとは...<br>
+	データクレンジングとは、モデルの精度を向上させる手法の一つ。
+	モデルに悪影響のあるインスタンスをのぞく部分集合を特定し精度向上を目指す。
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>先行研究のData Cleansing for Models Trained with SGDでは線形影響度LIEの推論の際に
+	学習時に用いたミニバッチ，学習率，モデルパラメータなどの情報が必要であり，計算コストが高かった．
+	これに対して，推論時に用いろ学習時の情報を最終エポックのみにし，データ効率の良い手法を提案．<br>
+	<image src="./framework.png"></image>
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<image src="./algorithm.png"></image>
+学習時に保持する情報について最終時のパラメータのみを用いることで
+大幅に使用メモリ量を削減．これによって大規模なデータセット等に対しても適用できるようになった．
+
+<h2>４．有効性の証明</h2>
+<p>
+先行研究と同様に，mnist，cifar10で分類問題を行った．
+また，バッチサイズに対して32~256に範囲においてクレンジングの挙動を確認．
+<image src="./result1.png"></image><br>
+</p>
+
+<h2>５．議論</h2>	
+<p>特になし
+</p>
+
+</section>
+
+
+</main>
+
+<footer>
+
+<ul id="footermenu">
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+</ul>
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
