@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>CurriculumNet 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="CurriculumNet: Weakly Supervised Learning from Large-Scale Web Images 要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="CoSSL"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+<!-- <div class="sh">
+<p>※800px以下のメニュー開閉時にのみ表示させたい情報があればここ（shボックスの中）に入れて下さい。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。</p>
+</div> -->
+<!--/.sh-->
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： ECCV2018<br>
+	・ <a href="https://arxiv.org/abs/1808.01097">リンク</a><br> 
+	・ <a href="https://github.com/msight-tech/research-curriculumnet">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	インターネットから収集したアノテーションの付いていない大規模な弱教師ありデータを対象に
+	カリキュラム学習を適用する．大量のノイズデータや不均衡に対して，特徴空間におけるデータの
+	分布密度によりデータの易～難を定め，簡単なデータから順にモデルに学習させる．
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>クレンジングや半教師あり学習，ノイズロバスト学習についての研究ではなく，新たな学習法の提案を行っている．<br>
+
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<image src = "./curriculumnet.png"></image>
+
+<h3>カリキュラムの設定</h3>
+<p>カリキュラム学習とは名前の通り，学習の方針を設計しそれに従いモデルを学習させる学習法であり，
+	この論文では，モデルの簡単なデータから順に学習させた方が良いのではないかという直観的なアイデア
+	のもとカリキュラムを作成する．<br>
+</p>
+
+<h3>カリキュラムの設計法</h3>
+<p>教師なし画像に対してデータの識別の難易度をソートすることを目的とする．<br>
+	具体的にはデータ密度分布を用いてサンプルの複雑さを測定する．ウォームアップ
+	させたモデルの全結合層特徴量を用いて，各カテゴリに属するデータとその他全データ
+	とのユークリッド距離を計測．<br>
+	$$D_{ij} = ||f(P_i) - f(P_j)||$$
+	ここでfが全結合層特徴量へ射影する関数．$P_i$が全データで$P_j$が各カテゴリに属するデータ．
+	Dの値が小さいほど互いに類似したデータである．<br>
+	このように距離$D_{ij}$を計測して，その上位k%までを類似しているデータとする．ここで局所密度を以下の式を用いて計測する．<br>
+	$$\rho_i = \sum_j X(D_{ij} - d_c)$$
+
+	$$
+	X(d) = \left\{
+		\begin{array}{ll}
+		1 & (x \geq 0)\\
+		0 & (x &lt; 0)
+		\end{array}
+		\right.
+	$$
+	つまり，一定以上近くにある類似しているデータ数を用いて密度を推定している．<br>
+	クラスタの中心点については以下の式による距離を定義<br>
+	$$
+	\delta_i = \left\{
+		\begin{array}{ll}
+		min_{j:\rho_j>\rho_i} (D_{ij}) & (if /exists j s.t. /rho_j>\rho_i)\\
+		max(D_{ij}) & (otherwise)
+		\end{array}
+		\right.
+	$$
+	これは近傍にある類似データが多いデータのもつDの最小値をクラスタ中心にして，
+	自身以上に類似データ数が多いデータがない場合は，自身がクラスタの中心とみなしているということ．<br>
+	※長々と書きましたが，実際の実装ではk-meansでクラスタリングしてクラスタ中心からの距離計測で実装しているっぽい
+</p>
+
+
+
+<h2>４．有効性の証明</h2>
+<p>
+webvision,ImageNet,Clothing1M,Food-191Nの４つのデータセットで実験．
+モデルA～Dは順に<br>
+・学習データ全体をそのまま学習に用いた場合<br>
+・クリーンサブセットのみを用いた場合<br>
+・提案手法により，クリーンセット，ノイズセットの２つのカリキュラムで学習させた場合<br>
+・提案手法で，クリーン，ノイズ，高ノイズの３つのカリキュラムで学習させた場合を示している．<br>
+<img src = './result1.png'>
+<img src = './result2.png'>
+また，クリーンサブセットを用いた場合の実験結果は以下の通り，<br>
+<img src = './result3.png'>
+<img src = './result4.png'>
+</p>
+
+<h2>５．議論</h2>	
+<p>特になし</p>
+
+</section>
+
+
+</main>
+
+<footer>
+
+<ul id="footermenu">
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+</ul>
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>

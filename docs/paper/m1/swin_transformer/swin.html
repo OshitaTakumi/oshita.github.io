@@ -84,33 +84,83 @@
 <p>今までのtransformerはself-attensionの計算量が二次関数に従うため，高解像度画像を用いたピクセル単位のタスクにおいては
 	計算量の観点から実現不可能だった．<br>
 	これに対して，swin transformerは階層的特徴マップを構築することで画像サイズに対して線形な計算量で計算可能となった．<br>
-	階層的とは，transfirmerの深い層では隣接するパッチを徐々にマージして行くことを示す．これにより，特徴ピラミッドネットワークやU-NET等を容易に利用できる．
-
+	階層的とは，transfirmerの深い層では隣接するパッチを徐々にマージして行くことを示す．これにより，特徴ピラミッドネットワーク
+	やU-NET等を容易に利用できる．<br>
+	<image src = "./swin.png"></image>
 </p>
 
 <h2>３．技術や研究のキモ</h2>
 
-<h3>分離と統合</h3>
-<p>既存の研究で特徴抽出器と分類器を分ける問戦略は不均衡データに対する対策として広く用いられているが，
-	その後，共通の損失の逆伝播なしで両者を結合して共同モジュール間の相互作用を活用する．
-	３つのモジュールから構成されている全体像は以下の通り．<br>
-	<image src = "./cossl.png"></image></p>
+<h3>アーキテクチャ</h3>
+<p>
+	層が深くなるにつれてパッチを統合していく．<br>
+	swin-transformer-blockはself-attensionを適応した後の出力を示す．<br>
+	ここで特徴マップのサイズはvggやresnetと同じになるように調整されている．
+	これは既存のcnnがバックボーンになっている部分を置き換えられるようにとのこと．<br>
+	<image src = "./arch.png"></image>
+</p>
 
-<h3>テールクラス特徴拡張(TFE)</h3>
-既存手法であるcRTに触発され，分類器学習モジュールを用いて分類器を学習させ，更にラベルなしデータを用いて分類器の精度向上を目指す．
-具体的にはmix match．式は以下の通り．<br>
-<image src = "./mixmatch.png">
+<h3>Swin-Transformer-Block</h3>
+<p>
+	このブロックは通常のtransformerで用いられているmultihead-self-attensionの部分が
+	shifted windowモジュールに置き換えられている．<br>
+	それ以外は通常のtransformerと同じ構造をしている．<br>
+	詳細な構造は上の図を参照．
+<h4>Shifted-window</h4>
+通常のtransformerではグローバルなself-attensionを行うため，高解像度画像を用いるようなタスクでは計算が時に関数的に増加するため適応が困難であった．<br>
+それに対して，shifted-windowどとにself-attensionをとることでこの問題を解決した．<br>
+<img src="./order.png"><br>
+一方で，特定の領域にのみattensionを用いるため，通常のものより能力が制限されてしまう．そこで，モジュールごとに前回のモジュールではattensionを見なかった領域について
+attension計算を行うようにwindowを$(w,h)=(\frac{M}{2},\frac{M}{2})$分移動させる．<br>
+画像に対してwindowが外れてしまう場合にはmaskを活用．この部分が今愛知まだ自分の中で分かってないので再度勉強が必要．
+</p>
 
 
 <h2>４．有効性の証明</h2>
-cifar10-LT，cifar100-LT，FOOD101で実験を行い評価，ラベルありデータ，ラベルなしデータはcifar10ではそれぞれ1500:3000，cifar100では150,300．
-<img src="./cifar10-result.png">
-<img src="./cifar100-result.png">
-<igm src="'./food101.png">
-<p></p>
+imageNet-1k，COCO，ADE20Kを用いてそれぞれ画像分類，物体検出，セグメンテーションを実験．
+<p>
+<h3>ImageNetにおけるclassification</h3>>
+transformerのベースであるDeitと比較．同程度のモデルアーキテクチャの複雑さでありながら，大幅に性能向上．<br>
+また当時の最新convNetであるregnetやefficientnetに対してもわずかに性能が向上しており，シンプルなswin transformerが徹底的なアーキテクチャ研究により
+開発されたconvNetの性能を向上したことはswinの可能性について示している．
+<div style="text-align:center;"><img src="./swim_result1.png"></div>
+</p>
+
+<p>
+<h3>ICOCOにおけるobject detection</h3>>
+resnet50と比較してswinはわずかにモデルサイズ、FLOP、レイテンシが大きくなるものの，性能向上が確認できた．
+また，モデルサイズ，FLOP，レイテンシが同程度のresnextとの比較実験においても優位性が確認された．
+Deitに対しても優位性が確認され，推論速度についても大幅に早くなっている．
+<ul>
+	<li><img src="./coco_result1.png"></li>
+	<li><img src="./coco_result2.png"></li>
+</ul>
+</p>
+
+<p>
+<h3>ADE20Kを用いたSemantic Segmentation</h3>>
+transformerのベースであるDeit-sとswin-sのひあっくでは同程度の計算コストにおいてmIoUで優位．<br>
+resnet101，resnextとの比較実験においても同様に優位性が確認された．
+</p>
+
+<p>
+<h3>shifted windowの有効性証明</h3>>
+上記で載せた実験について通常の1windowの例とshifted windowで実験比較．<br>
+また，相対位置バイアスをshiftに乗せた場合の実験も行った．．
+<img src="./ade_result1.png">
+</p>
 
 <h2>５．議論</h2>	
-<p>データ分布が既知，未知の場合についての比較に関するあプレーションスタディあり.最後の方は正直よめてない</p>
+<p>画像分類精度については絶対位置埋め込みにより分類性能は向上するものの，
+	物体検出や，セグメンテーションにおいてはむしろ性能が下がってしまう．<br>
+</p>
+
+
+<h2>感想</h2>	
+<p>self-attensionについては自身の理解が全く及んでいないため，Transformer，Vision 
+	Transformerについて勉強しつつ理解する必要がある．<br>
+</p>
+
 
 </section>
 
