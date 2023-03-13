@@ -155,27 +155,34 @@ $$
 Z_{T-s})\frac{\eta_{\pi_k(j)}} {|S_{\pi_k(j)}|} 
 g(z_j; \theta^{[{{\pi}_k(j)]}})
 $$
+
+ここでクエリベクトルuを$u^{[t]} = Z_{t+1}Z_{t+2}...Z_{T-1}u$とすれば線形影響度は以下の通り
+$$
+LIE_{-j}^{[T]}(u) = 〈u,\Delta\theta_{-j}〉= \sum_{k=1}^{K} 
+〈u^{[\pi_k(j)]},\frac{\eta_{\pi_k(j)}}{|S_{\pi_k(j)}|} g(z_j;\theta^{[\pi_k(j)]})〉
+$$
+
+<image src = "./algorithm.png">
 </p>
 
 
 
 <h2>４．有効性の証明</h2>
 <p>
-webvision,ImageNet,Clothing1M,Food-101の４つのデータセットで実験．
-モデルA～Dは順に<br>
-・学習データ全体をそのまま学習に用いた場合<br>
-・クリーンサブセットのみを用いた場合<br>
-・提案手法により，クリーンセット，ノイズセットの２つのカリキュラムで学習させた場合<br>
-・提案手法で，クリーン，ノイズ，高ノイズの３つのカリキュラムで学習させた場合を示している．<br>
-<img src = './result1.png'>
-<img src = './result2.png'>
-また，クリーンサブセットを用いた場合の実験結果は以下の通り，<br>
-<img src = './result3.png'>
-<img src = './result4.png'>
+Adult, 20Newsgroups, MNISTの３つのデータセットを使用<br>
+特に分類問題の結果は以下の通り．計算量の問題からLIEの影響度の計算に用いる
+訓練時の情報は1エポック分しか用いていない．<br>
+
+・SGDはエポック数20，<br>
+．19エポックの間SGDで学習し，最後の1エポックで
+counterfactual SGDを使用
+<image src="./result1.png"></image><br>
 </p>
 
 <h2>５．議論</h2>	
-<p>特になし</p>
+<p>ミニバッチと，学習率，その時のパラメータが必要であり，メモリの観点から
+	実験で十分な手法の評価ができていなさそう，
+</p>
 
 </section>
 
