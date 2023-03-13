@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>Data Cleansing for Models Trained with SGD 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Data Cleansing for Models Trained with SGD 要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="CoSSL"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+<!-- <div class="sh">
+<p>※800px以下のメニュー開閉時にのみ表示させたい情報があればここ（shボックスの中）に入れて下さい。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。</p>
+</div> -->
+<!--/.sh-->
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： ECCV2018<br>
+	・ <a href="https://arxiv.org/abs/1808.01097">リンク</a><br> 
+	・ <a href="https://github.com/msight-tech/research-curriculumnet">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	data cleansingとは...<br>
+	データクレンジングとは、モデルの精度を向上させる手法の一つ。
+	モデルに悪影響のあるインスタンスをのぞく部分集合を特定し精度向上を目指す。
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>今までの研究では、モデルが最適化されていること、損失関数が凸性を持つことが条件であった
+	この論文ではこれらの条件がなくてもデータクレンジングができるアルゴリズム手法を提案している。<br>
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+
+<h3>Counterfactual SGD</h3>
+<p>j番目のインスタンスが存在しない状態でのt番目のモデルパラメータ$\theta$の更新
+	$$ 
+	\theta_{-j}^{[t+1]} \longleftarrow  \theta_{-j}^{[t]} - 
+	\frac{\nu_t}{|S_t|} \sum_{i \in S_t \backslash {j}} g(z_i;\theta_{-j}^{[t]})
+	$$
+</p>
+
+<h3>SGD-Influence</h3>
+<p>j番目のインスタンスが存在する場合と，しない状態のt番目のモデルパラメータ$\theta$の差
+	$$ 
+	\theta_{-j}^{[t]} - \theta^{[t]} = \theta[t]
+	$$
+	これは厳密な
+	最適解を探索する必要がない場合に非常に有益な影響力の概念である．
+</p>
+
+<h3>Linear Influence Estimation(LIE)</h3>
+<p>j番目のインスタンスが存在する場合と，しない状態のt番目のモデルパラメータ$\theta$の差
+	$$ 
+	\theta_{-j}^{[t]} - \theta^{[t]} = \theta[t]
+	$$
+	この方法ではバッチサイズ100の場合であっても計算量が多い．
+	そのため，SGDを複数回実行しなくても良いLIEの推定アルゴリズムを考える．
+</p>
+
+<h3>SGD-influenceの新しい推定値</h3>
+<p>
+	1インスタンスを抜いて場合，そのインスタンスがある，ない場合の各パラメータ更新量(LIE)を
+	計算するのは非現実的である．そのため，過去の計算量から最後のT回目のパラメータ更新の結果のみを過去の
+	情報から計算する．<br>
+
+	$$\theta_{-j}^{[t]} - \theta^{[t]} \approx
+	\frac{\eta_{\pi(j)}}{|S_{\pi(j)}|} Z_{T-1}Z_{T-2}...Z_{\pi(j)+1}
+	g(z_j;\theta^{[\pi(j)]}) =: \Delta \theta_{-j}
+	$$
+
+	この近似には，損失勾配のテイラー展開の第１項のみを用いて近似する．
+	近似には，損失値の二階微分であるヘシアン行列の存在を仮定している．
+	式は以下の通り
+	$$\frac{1}{|S_t|}\sum_{i \in S_t} (\Delta_{theta} l(z_i ;\theta_{-j}^{[t]})
+	 - (\Delta_{theta} l(z_i ;\theta^{[t]}) ) \approx H^{[t]}(\theta_{-j}^{[t]}-\theta^{[t]})
+	$$
+
+	$$
+	H^{[t]} := \frac{1}{|S_t|}\sum_{i \in S_t}
+	\Delta^2_{\theta}l(z_i;\theta^{[t]})
+	$$
+
+	この推定値$\delta \theta^{[t]_{-j}}$については凸性，非凸性に限らず保証できる．
+	詳細は論文参照．
+</p>
+
+
+<h3>Kエポック目におけるLIE</h3>
+<h4>Kエポック時点でのSGDに拡張</h4>
+<p>
+π1(j), π2(j), ..., πK(j)をインスタンスzjがKエポックのSGDで使われた時の各ステップとする．<br>
+kステップ目におけるインスタンスzの持つ影響力は
+$$Z_{T-1}Z_{T-2}...Z_{\pi(j)+1}
+g(z_j;\theta^{[\pi(j)]}) =: \Delta \theta_{-j}
+$$
+と既にわかっている．これを合計して以下のように表せる．
+$$
+\Delta\theta_{-j} = 
+\sum_{k=1}^K  (\prod_{s=1}^{T-{{\pi}_k(j)}-1} 
+Z_{T-s})\frac{\eta_{\pi_k(j)}} {|S_{\pi_k(j)}|} 
+g(z_j; \theta^{[{{\pi}_k(j)]}})
+$$
+</p>
+
+
+
+<h2>４．有効性の証明</h2>
+<p>
+webvision,ImageNet,Clothing1M,Food-101の４つのデータセットで実験．
+モデルA～Dは順に<br>
+・学習データ全体をそのまま学習に用いた場合<br>
+・クリーンサブセットのみを用いた場合<br>
+・提案手法により，クリーンセット，ノイズセットの２つのカリキュラムで学習させた場合<br>
+・提案手法で，クリーン，ノイズ，高ノイズの３つのカリキュラムで学習させた場合を示している．<br>
+<img src = './result1.png'>
+<img src = './result2.png'>
+また，クリーンサブセットを用いた場合の実験結果は以下の通り，<br>
+<img src = './result3.png'>
+<img src = './result4.png'>
+</p>
+
+<h2>５．議論</h2>	
+<p>特になし</p>
+
+</section>
+
+
+</main>
+
+<footer>
+
+<ul id="footermenu">
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+<li><a href="#">フッターメニュー</a></li>
+</ul>
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
