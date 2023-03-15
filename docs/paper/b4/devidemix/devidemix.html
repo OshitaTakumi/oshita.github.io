@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>DIVIDEMIX: LEARNING WITH NOISY LABELS AS SEMI-SUPERVISED LEARNING 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="DIVIDEMIX: LEARNING WITH NOISY LABELS AS SEMI-SUPERVISED LEARNING 要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="Devide Mix"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： ICLR2020<br>
+	・ <a href="https://arxiv.org/abs/2002.07394">リンク</a><br> 
+	・ <a href="https://github.com/LiJunnan1992/DivideMix">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	半教師あり学習を用いたノイジーラベルに対する学習フレームワーク．
+	学習データをクリーン，ノイジーに分割し，その双方を用いて半教師あり学習を行う．
+	また，ネットワークは２つ用い，各ネットワークは他方のネットワークからのデータセット分割
+	に従い学習する．
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	既存の研究である，半教師あり学習，Mixup，Co-teaching等の技術をまとめた．
+	また，MixMatchと呼ばれるラベルなしデータに対してMixupoを拡張した手法を提案．
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+２つのネットワークを同時に学習させる枠組み．
+DNNがノイズの多いデータよりもクリーンなサンプルを早く学習することに注目．
+ウォームアップさせた2モデルを用いて，一方のネットワーク出力を用いてGMMでラベルありデータ，なしデータを区別．<br>
+区別方法はGMMに対して平均値の小さい成分に属するデータに対してクリーンデータと判断する予測確率の閾値
+を定めることで区別している．
+	<h3>co-devide</h3>
+	<p>
+		上記のような学習法では，クリーンと誤って判断されたノイズデータは容易にモデルにオーバーフィッティング
+		してしまう．これに対して，これを防ぐために異なる，パラメータ初期化，学習データで学習
+		下２津のモデルを用いることで，互いの異なるフィルタリング能力によりノイズに対してロバストなモデルになる．<br>
+		ウォームアップ注に関してCrossEntropy Lossは対象ノイズに対しては強いが非対称ノイズに対してはすぐに過適合してしまう．
+		そのため，CrossEntropy Lossに対して以下のモデルの予測確率に関するペナルティ項Hを追加．
+		$$
+		CE(l) = \{l_i\}^N_{i=1} = \{ -\sum^C_{c=1} y^c_i log(p^c_model(x_i;\theta))\}^N_{i=1} 
+		$$
+
+		$$
+		H = -\sum_c p^c_{model}(x;\theta) log(p^c_model(x;\theta))
+		$$
+		<image src="./gmm.png">
+	</p>
+
+	<h3>半教師あり学習</h3>
+	<p>
+		ラベルありデータに関しては他方のモデルによって生成されたクリーンデータである確率$w_b$を用いて
+		モデルの予測確率p_bとラベルy_bに関して以下のようにラベルを共同洗練．
+		$$
+		\overline{y_b} = w_by_b + (1 - w_b)p_b
+		$$
+		その後<a href="https://qiita.com/nkriskeeic/items/db3b4b5e835e63a7f243">温度パラメータT</a>を用いて処理．
+		$$
+		\hat{y_b} = Sharpen(\overline{y_b},T)
+		$$
+		<br>
+		ラベルなしデータに関しては，両ネットワークを用いて共同で推測する．
+		以下の要に両ネットワークからの予測確率を平均
+		$$
+		\overline{q_b} = \frac{1}{2M}\sum_m \{ p_{model}(\hat{u}_{b,m};\theta^{(1)}) + \}p_{model}(\hat{u}_{b,m};\theta^{(2)})
+		$$
+		そのあとはラベルありデータと同様に温度パラメータを用いて処理．<br>
+		この精錬した予測確率と画像のペアをミニバッチとして学習させる．
+	</p>
+
+	<h3>損失関数</h3>
+	ラベルありデータ，なしデータ，正則化項の３つから成る．
+	<p>
+		$$
+		L_X = -\frac{1}{|X^{\prime}|} \sum_{x,p \in X^{\prime}} \sum_c
+		p_clog(p^c_{model}(x;\theta))
+		$$
+
+		$$
+		L_U = -\frac{1}{|U^{\prime}|} \sum_{x,p \in U^{\prime}} 
+		||p-p_{model}(x;\theta)||^2_2
+		$$
+
+		$$
+		L_{reg} = \sum_c \pi_c log(\frac{\pi_c}{ \frac{1}{|X^{\prime}|+|U^{\prime}|} 
+		\sum_{x \in X^{\prime}+U^{\prime}} p_{model}^c(x;\theta)})
+		$$
+		<br>
+		最後にまとめて以下の通り
+		$$
+		L = L_X + \lambda_u L_U + \lambda_r L_{reg}
+		$$
+	</p>
+
+
+<h2>４．有効性の証明</h2>
+<p>
+cifar10，cifar100，Clothing1M，Webvisionに対して実験．
+cifarに関しては異なるノイズ律，及び対象ノイズ，非対称ノイズに対しても実験している．
+cifarに実験は上から順に対象ノイズと40%の非対称ノイズに対する実験結果を示している．<br>
+<image src="./result1.png"></image><br>
+<image src="./result2.png"></image><br>
+<image src="./result3.png"></image><br>
+<image src="./result4.png"></image><br>
+</p>
+
+<h2>５．議論</h2>	
+<p>
+	・学習モデルを変更させた場合の結果<br>
+	・ノイズ率に対する損失関数のパラメータの説明<br>
+	・データセットの定性的評価<br>
+	・学習にかかる時間<br>
+	の大きく４項目について記述あり
+
+</p>
+
+</section>
+
+
+</main>
+
+<footer>
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
