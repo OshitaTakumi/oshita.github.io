@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>FINE Samples for Learning with Noisy Labels 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="DIVIDEMIX: LEARNING WITH NOISY LABELS AS SEMI-SUPERVISED LEARNING 要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="Devide Mix"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="m1.html">修士１年</a></li>
+			<li><a href="m2.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： NeurIPS2021<br>
+	・ <a href="https://arxiv.org/abs/2102.11628">リンク</a><br> 
+	・ <a href="https://github.com/Kthyeon/FINE_official">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	ラベルノイズを検出するために従来のヒューリスティックに頼らない手法を提案．
+	空くデータ点の潜在的表減のダイナミクスに注目して，特徴量のデータグラム行列を固有値分解し，
+	潜在的分布と各表現の整合性を測定している．
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	ヒューリスティックな指標に頼ることなく，理論的に保証されたノイズデータ検出法を提案．
+
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<image src="./algorithm.png"></image>
+	<h3>アラインメントの定義</h3>
+	<p>
+		クラスとラベル付けされたデータxｍ入力$\sum_x$を持つ特徴抽出器の出力zとする．
+		ここでデータセットＤ中のクラスkとラベル付けされたデータの特徴量のグラム行列は以下の通り．
+		$$
+		\sum_k = \sum_{z \in \{class=k\}zz^T}
+		$$
+		これを用いてデータのアラインメント$(u_1,z_i)^2$を推定する．
+		ここで$u_1$とは$\sum_k$の固有値分解から得られた$U_k$の最初の列．
+		つまり固有値が降順であるとき以下の通り．
+		$$
+		\sum_k = U_k A_k U_k^T
+		$$
+		主成分分析でいうと，一番分散の大きい情報量が多い特徴量について
+		アラインメントを導出している事と等しい．このアラインメントをGMM
+		にあてはめてノイズかクリーン化を判定する．
+	</p>
+
+	
+	
+	
+
+
+<h2>４．有効性の証明</h2>
+<p>
+cifar10，cifar100，Clothing1M，Webvisionに対して実験．
+cifarに関しては異なるノイズ律，及び対象ノイズ，非対称ノイズに対しても実験している．
+cifarに実験は上から順に対象ノイズと40%の非対称ノイズに対する実験結果を示している．<br>
+<image src="./result1.png"></image><br>
+<image src="./result2.png"></image><br>
+<image src="./result3.png"></image><br>
+<image src="./result4.png"></image><br>
+</p>
+
+<h2>５．議論</h2>	
+<p>
+	・学習モデルを変更させた場合の結果<br>
+	・ノイズ率に対する損失関数のパラメータの説明<br>
+	・データセットの定性的評価<br>
+	・学習にかかる時間<br>
+	の大きく４項目について記述あり
+
+</p>
+
+</section>
+
+
+</main>
+
+<footer>
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
