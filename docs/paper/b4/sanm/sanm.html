@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<title>Learning with Noisy labels via Self-supervised Adversarial Noisy Masking 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Learning with Noisy labels via Self-supervised Adversarial Noisy Masking
+要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="Learning with Noisy labels via Self-supervised Adversarial Noisy Masking
+	"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+<!-- <div class="sh">
+<p>※800px以下のメニュー開閉時にのみ表示させたい情報があればここ（shボックスの中）に入れて下さい。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。</p>
+</div> -->
+<!--/.sh-->
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： 2018<br>
+	・ <a href="https://arxiv.org/pdf/2302.06805v2">リンク</a><br> 
+	・ <a href="../../../404.html">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	noiseラベルを持つデータに対して，特徴量の観点からアプローチを行った論文．
+	深層特徴マップと呼ばれるを用いてclenaとnoisyデータを見分けられることを経験則的に発見した．
+	具体的には，誤予測したサンプルの特徴マップに差分があり，cleanデータで学習した得t票マップは対象物体について
+	注目しているが，noiseラベルで学習したデータは対象物体ではなく背景部分に注目しているといった傾向があった．
+	これを利用して敵対的ノイズマスキングと呼ばれる新たなロバストな学習アプローチを提案している．<br>
+	<image src="./map.png"></image>
+	</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	正則化については様々損失関数の面からアプローチはあったものの，オーグメントに関する
+	正則化について取り組んでいる論文は極めて少ない．私の知る限りではこの論文のほかに1つしかない．
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<p>
+	入力画像の特定の部分のみマスキングすることによって多様な活性化マップを制止絵師，認識バイアス
+	を緩和するモデルを明示的に正則化する手法．これについてnoiseデータを用いたtrainingについても調査した．<br>
+	<image src="./archtect.png"></image>
+<h3>Adversarial Noisy Masking</h3>
+	各サンプル$x_i$から期待値最大化アルゴリズムによって得られたCEロスに対してガウスコンポーネントが2のGMMにあてはめる．
+	これはdevidemixと同じであると思われる．<br>
+	そこから$x_i$に対する重み$G_i$を獲得．$x_i$から得られた特徴量$F_i$とそれに対するモデルの予測値$\tilde{y_i}$について
+	以下のように活性化マップを定める．
+	$$
+		A_i = CAM(F_i, argmax(\tilde{(y_i)}))
+	$$
+	ここでGMMは全体的に正しいと仮定している．GMMから獲得される重みについてはまだ改善の余地がもしかしたらあるかもしれない．<br>
+	今までの仮説であるcleanなデータと比較してnoiseデータは対象物体以外の無駄な背景領域について注目しているという観点について
+	損失関数$L(x_i,y_i)$について適応的な摂動$max L(x_i,y_i)$の存在を仮定し，noiseの多いデータに対しては最大活性化領域に対して
+	より比率の多いマスクを生成する．これにより残り領域に対して注意を向けるようにモデルに強制する．<br>
+	ここでGMMによる分離段階で閾値によるフィルタリングではモデルの活性化マップが無意味な背景に散らばってしまう(らしい，なんで？？)
+<h3>Decoda $M_D$</h3>
+	画像に対しては，元からついているラベルに関してはdevidemixと同様に洗練を行う．その後は，devidemixとは異なりマスク比を導出しマスク画像
+	に対するラベル(予測確率)を生成．予測確率を用いて更にEncoderを訓練すると同時に，マスク予測を行うことで自己教師あり学習のpre-texttaskとして成立．
+</p>
+
+<h2>４．有効性の証明</h2>
+<p>
+	cifar10,cifar100,clothing1mで実験．<br>
+	対象ノイズの入ったcifar10,100における実験結果<br>
+	<image src="./result1.png"><br>
+	対象ノイズの入ったcifar10における実験結果<br>
+	<image src="./result2.png"><br>
+	clothing1mにおける実験結果<br>
+	<image src="./result3.png"><br>
+	その他，cifar10,100においてsanmの各モジュールを機能させた場合や，他の手法と組み合わせた場合の実験結果<br>
+	<image src="./result4.png"><br>
+	<image src="./result5.png"><br>
+</p>
+
+<h2>５．議論</h2>	
+
+
+</section>
+
+
+</main>
+
+<footer>
+
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
