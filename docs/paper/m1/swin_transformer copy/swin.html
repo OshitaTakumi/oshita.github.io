@@ -39,11 +39,11 @@
 	<li><a href="selh-intro.html">自己紹介</a></li>
 	<li><a href="">過去の研究</a>
 		<ul>
-			<li><a href="b3.html">個人製作アプリ</a></li>
-			<li><a href="b3.html">学部３年</a></li>
-			<li><a href="b4.html">学部４年</a></li>
-			<li><a href="404.html">修士１年</a></li>
-			<li><a href="404.html">修士２年</a></li>
+			<li><a href="../../../my_app.html">個人製作アプリ</a></li>
+			<li><a href="../../../b3.html">学部３年</a></li>
+			<li><a href="../../../b4.html">学部４年</a></li>
+			<li><a href="../../../404.html">修士１年</a></li>
+			<li><a href="../../../404.html">修士２年</a></li>
 		</ul>
 	</li>
 	<li><a href="club.html">学外活動</a></li>
@@ -138,7 +138,7 @@
 	$A\in{0,...,H-1} \times {0,...,W-1}$とする．各画像に対して質問とそれが
 	表す画像内の位置が一致することが望ましい．式は次の通り．$m=|Q|=|A|$　<br>
 	詳細としては，各名前Qに対してAを関連づけるような正方順序行列$\prod \in S_m$
-	を予測する．ここで$\prob_{qa}=1$<br>
+	を予測する．ここで$\prod_{qa}=1$<br>
 	ここで予測にはコスト関数を$C_{qa}=s(i_a,t_q)$で定義して，最適輸送距離を用いた
 	以下の式で計算する．<br>
 	<image src="./wasserstain.png"><image><br>
@@ -150,7 +150,7 @@
 	キーポイントの命名と異なる点はキーポイントに関する位置所法の事前知識を仮定しないこと．
 	キーポイント名qが与えられた場合，その位置aは
 	$$
-	\hat{a}(i,q) = \unserset{argmax{a\inA}} 
+	\hat{a}(i,q) = \underset{argmax{a\in A}} 
 	[s(i_a,t_q)-\frac{1}{|Q|}\sum_{\overline{q}\in Q}s(i_s,t_{\overline{q}})]$$
 	で与えられる．
 </p>
