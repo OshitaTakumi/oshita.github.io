@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>What does CLIP know about a red circle? Visual prompt engineering for VLMs 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What does CLIP know about a red circle? Visual prompt engineering for VLMs 要約">
+<link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="swin"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+<!-- <div class="sh">
+<p>※800px以下のメニュー開閉時にのみ表示させたい情報があればここ（shボックスの中）に入れて下さい。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。<br>
+サンプルテキスト。サンプルテキスト。</p>
+</div> -->
+<!--/.sh-->
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： 2021<br>
+	・ <a href="https://arxiv.org/abs/2103.14030">リンク</a><br> 
+	・ <a href="https://github.com/microsoft/Swin-Transformer">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	CLIPには画像に対して円を書くだけでグローバルな画像情報を保ちつつ，円部分に対してモデルの注意を向けることができる
+	性質がある．
+	目的は2つある．<br>
+	1つ目はゼロショットでVLM(大規模な視覚言語モデル)から有益な情報を抽出するためのツールの作成<br>
+	2つ目はVLMとその訓練データの興味深く予想外の特性を明らかにすること，具体的には画像中に円を記すことで
+	会話の内容をオブジェクトに寄せる，画像領域の分析といった視覚的プロンプトエンジニアリングについての調査である<br>
+	<image src="./img1.png">
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	参照表現理解(reffering expression comprehension)についてはCLIPの登場により可能になったがそれらの研究は
+	あまり進んでいない．<br>
+	ReCLIPは左／右、小さい／大きいなどの関係を考慮するためのアドホックな後処理ステップの前に、CLIPを使用して
+	オブジェクト提案を切り取り、それらをランク付けする。<br>
+	CPTは、オブジェクト提案のボックスに色を付け、事前学習されたキャプションモデルを使用して、どの色の提案が
+	クエリ記述に対応するかを自動回帰的に予測する．<br>
+	人気な研究になっていくRECにではあるものの，VLMの偏りを評価する方法は、まだ十分に確立されていない．
+	下流タスクに対してゼロショットで適用する場合はこれは非常に重要．
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<p>
+	一般的には，VLMでは画像とテキスト間のスコアを評価するが，質問と解答をそのスコアと評価することはできない．
+	しかし，プロンプトエンジニアリングによりこれが可能になった．つまり，画像中の加筆した注目領域と質問に関係があるから．<br>
+	<image src="./img2.png">
+
+</p>
+
+<h3>Swin-Transformer-Block</h3>
+<p>
+	
+</p>
+
+
+<h2>４．有効性の証明</h2>
+<p>
+
+</p>
+
+
+<h2>５．議論</h2>	
+<p>
+	
+</p>
+
+
+<h2>感想</h2>	
+<p>
+
+</p>
+
+
+</section>
+
+
+</main>
+
+<footer>
+
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
