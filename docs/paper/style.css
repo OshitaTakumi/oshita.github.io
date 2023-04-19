@@ -92,7 +92,7 @@ main > article {
 #container {
 	height: 100%;
 	max-width: 1920px;				/*サイトの最大幅*/
-	margin: 0 auto;
+	/* margin: 0 auto; */
 	display: flex;					/*flexボックスを使う指定*/
 	flex-direction: column;			/*子要素を縦並びにする*/
 	justify-content: space-between;	/*並びかたの種類の指定*/
@@ -107,32 +107,22 @@ header {
 	position: relative;
 }
 
-/*ロゴ画像*/
-header #logo img {display: block;}
-header #logo {
-	width: 200px;		/*幅*/
+header .logo {
+	width: 20px;		/*幅*/
 	margin: 0 auto;		/*ロゴを左右中央に配置*/
 }
 
-/*トップページのロゴ画像*/
-.home header #logo {
-	position: absolute; z-index: 1;
-	width: 75%;		/*ロゴの幅*/
-	left: 15%;		/*headerに対して、左からの配置場所*/
-	top: 0px;		/*headerに対して、上からの配置場所*/
+header .icon{
+	margin-left: 0%;		/*headerに対して、左からの配置場所*/
+	margin-top: 70%;		/*headerに対して、上からの配置場所*/
 }
 
 /*トップページのロゴ下に書いている説明文*/
-header #logo p {
+/* header #logo p {
 	font-size: 0.8em;
-}
+} */
 
-.home header #icon  {
-	position: absolute; z-index: 1;
-	width: 75%;		/*ロゴの幅*/
-	left: 23%;		/*headerに対して、左からの配置場所*/
-	top: 0%;		/*headerに対して、上からの配置場所*/
-}
+
 
 /*menubarブロック初期設定
 ---------------------------------------------------------------------------*/
@@ -677,14 +667,6 @@ p.btn {margin: 0;}
 ここから下は画面幅400px以上の追加指定
 ---------------------------------------------------------------------------*/
 @media screen and (min-width:400px) {
-
-/*header（ロゴなどが入った最上段のブロック）
----------------------------------------------------------------------------*/
-/*トップページのロゴ画像*/
-.home header #logo {
-	padding-top: 5%;	/*上に空ける余白。上下間のバランスをとって下さい。*/
-}
-
 /*　※注意！　下の閉じカッコ　}　はこのブロックに必要なので、削除しないで下さい。　*/
 
 }
@@ -697,15 +679,6 @@ p.btn {margin: 0;}
 ここから下は画面幅600px以上の追加指定
 ---------------------------------------------------------------------------*/
 @media screen and (min-width:600px) {
-
-
-/*header（ロゴなどが入った最上段のブロック）
----------------------------------------------------------------------------*/
-/*トップページのロゴ画像*/
-.home header #logo {
-	width: 40%;			/*ロゴの幅*/
-	padding-top: 10%;	/*上に空ける余白。上下間のバランスをとって下さい。*/
-}
 
 
 /*listブロック
@@ -752,21 +725,13 @@ html, body {
 ---------------------------------------------------------------------------*/
 .btn-wrapper {
 	text-align: center;
-	margin-right: 20px;
+	margin-right: 10px;
 	vertical-align: -100000px;
   }
 
 /*header（ロゴなどが入った最上段のブロック）
 ---------------------------------------------------------------------------*/
-/*トップページのロゴ画像*/
-.home header #logo {
-	left: 10%;			/*headerに対して、左からの配置場所*/
-	padding-top: 13%;	/*上に空ける余白。上下間のバランスをとって下さい。*/
-}
-.home header #icon {
-	left: 15%;			/*headerに対して、左からの配置場所*/
-	padding-top: 13%;	/*上に空ける余白。上下間のバランスをとって下さい。*/
-}
+
 
 
 /*menubarブロック設定

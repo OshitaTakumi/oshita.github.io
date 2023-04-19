@@ -15,7 +15,7 @@
 <title>What does CLIP know about a red circle? Visual prompt engineering for VLMs 要約</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="What does CLIP know about a red circle? Visual prompt engineering for VLMs 要約">
-<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../../css/style.css">
 </head>
 
 <body>
@@ -67,9 +67,9 @@
 <section>
 
 <h2>論文</h2>
-<p>・ Year ： 2021<br>
-	・ <a href="https://arxiv.org/abs/2103.14030">リンク</a><br> 
-	・ <a href="https://github.com/microsoft/Swin-Transformer">github</a>
+<p>・ Year ： 2023<br>
+	・ <a href="https://arxiv.org/abs/2304.06712">リンク</a><br> 
+	・ <a href="">github</a>
 </p>
 
 <h2>１．どんなものか</h2>
@@ -80,7 +80,7 @@
 	1つ目はゼロショットでVLM(大規模な視覚言語モデル)から有益な情報を抽出するためのツールの作成<br>
 	2つ目はVLMとその訓練データの興味深く予想外の特性を明らかにすること，具体的には画像中に円を記すことで
 	会話の内容をオブジェクトに寄せる，画像領域の分析といった視覚的プロンプトエンジニアリングについての調査である<br>
-	<image src="./img1.png">
+	<image class='image' src="./img1.png">
 </p>
 
 <h2>２．先行研究との差分</h2>
@@ -104,7 +104,7 @@
 		s(q,a|i,t) = s(iqa,tqa)
 	$$
 	ここでiqaとtqaは入力画像とテキストのバージョンで、質問と回答のペア（q、a）を反映するように後者を変換することによって得られる．
-	<image src="./img2.png">
+	<image src="./img2.png" class='image'>
 </p>
 
 <h3>名前付きキーポイントローカライズ問題</h3>
@@ -133,43 +133,76 @@
 <h4>キーポイントの命名</h4>
 <p>
 	最も単純なタスクとしてはオブジェクトのキーポイントの名前と画像内の２次元的
-	マッチングが挙げられる．画像をi，キーポイント名をQ，対応する位置
+	な位置とのマッチングが挙げられる．画像をi，キーポイント名をQ，対応する位置
 	$A\in{0,...,H-1} \times {0,...,W-1}$とする．各画像に対して質問とそれが
 	表す画像内の位置が一致することが望ましい．式は次の通り．$m=|Q|=|A|$　<br>
 	詳細としては，各名前Qに対してAを関連づけるような正方順序行列$\prod \in S_m$
 	を予測する．ここで$\prod_{qa}=1$<br>
 	ここで予測にはコスト関数を$C_{qa}=s(i_a,t_q)$で定義して，最適輸送距離を用いた
 	以下の式で計算する．<br>
-	<image src="./wasserstain.png"><image><br>
+	<image src="./wasserstain.png" class='image'><br>
 </p>
 
 <h4>キーポイントのローカライズ</h4>
 <p>
 	目的：画像中のキーポイントqの特定
 	キーポイントの命名と異なる点はキーポイントに関する位置所法の事前知識を仮定しないこと．
-	キーポイント名qが与えられた場合，その位置aは
+	つまり$A\in{0,...,H-1} \times {0,...,W-1}$が事前情報として獲得できない．その中から領域
+	$m \times m$を推測する．キーポイント名qが与えられた場合，その位置aは
 	$$
 	\hat{a}(i,q) = \underset{argmax{a \in A}} 
 	[s(i_a,t_q)-\frac{1}{|Q|}\sum_{\overline{q}\in Q}s(i_s,t_{\overline{q}})]$$
-	で与えられる．
+	で与えられる．最も質問とそれに対するスコアが高かった領域aがローカライズされる．
+	ここで意味のない領域を抽出しないように<a href="https://arxiv.org/abs/2209.00383">先行研究</a>
+	に従いサリエンシー法によって制限される．
 </p>
 
 <h4>参照表現の理解</h4>
 <p>
 	参照表現の理解：画像中のオブジェクトに対して，それを明示的に参照するテキストに対応
-	するものとして検出する．例えば「右から4番目の犬」のような表現．
+	するものとして検出すること．例えば「右から4番目の犬」のような表現に対して正しく入力画像
+	の右から４番目の犬が検出されればモデルは理解しているということ．
 	アプローチ：<a href="https://arxiv.org/abs/2203.08481">先行研究</a>で示されるように
 	画像iに対して<a href="https://arxiv.org/abs/1801.08186">既存手法</a>を用いてオブジェクト
 	と提案のセットを抽出し，可能な答えセットAとして解釈．これを以下のように定式化．<br>
-	<image src="./object_proposal.png"></image>
+	<image src="./object_proposal.png" class='image'></image>
 	
 </p>
 
 <h2>４．有効性の証明</h2>
-<p>
+キーポイントの命名、キーポイントの定位、および表現理解の参照に
+ついて考え、VLMにおける視覚的マーキングの特性を研究．<br>
+<h3>キーポイントの命名</h3>
+CUB-200-2011とSPair71kデータセットを使用．CUB-200-2011は各画像のキーポイントに対して
+名前を付けた注釈を含んでいるが，後者は画像のペアで共通する部分についての情報は持っているが
+名前については持っていない．この実験ではこれに対して手動で名前を付けている．<br>
+以下の実験結果では，キーポイントの命名について性能向上が確認され，また画像に対する円の書き方についても
+赤丸が最も良いということが示された．人間が赤丸を用いて注釈を用いる傾向にあることが可能性として考えられる．
+<image class='image' src="./spair71k.png"><br>
+<image class='image' src="./spair_hand_labeled.png"><br>
+<image class='image' src="./naming_result.png"><br>
+<image class='image' src="./prompt_way.png"><br>	
 
-</p>
+<h3>CLIPの学習データ上のマーカーを含むデータについて</h3>
+CLIPが赤丸の付いたデータを学習したことにより，ゼロショットでもこのような現象が起きているのではないかについて調査．
+YFCC15MというCLIPの学習に用いられたデータのサブセットからこのようなデータを実際に探した．
+分類器に対してvit_b_16，resnet50x16のCLIPビジョンエンコーダのアンサンブルを用いた2クラス分類を解かせることで，YFCC15M
+の6Mサブセットから，スコアの高い順に10kの画像を取得し，最後はこの1万枚の画像を手動で調べることでアノテーションの書かれた画像を
+70枚獲得した．以下実例<br>
+<image class='image' src="./annotationed_traindata.png"><br>
+このことからもマーカー付きのデータは非常にまれ(0.001%ほど)であり，この挙動自体も大容量モデルが大規模データセットからでし学習できない
+ことが示唆される．異なる事前学習データセットにおけるCLIPの性能比較もなされており，一般的に，キーポイントマッチングの性能は事前学習データ
+セットサイズ，vitのエンコーダサイズに依存する．その結果が次の通り．<br>
+<image class='image' src="./naming_key_point.png"><br>
+データ数が多いLAION-2Bの事前学習結果の方が性能が悪いのはWIT-400MとLAION-2Bの作成時のフィルタリングの違いによるもので、後者では、生成モデルの美的
+感覚を重視したため、アノテーションの例が削除された可能性があると論文では推測している．データ数，エンコーダサイズに従って性能は良い傾向にあるが，
+そのまま収束するとはならず，WIT-400Mで事前学習したCLIPの性能が劇的に向上したことが見受けられる．<br>
+<image class='image' src="./zs_result.png">
 
+<h3>キーポイントローカリゼーション</h3>
+メトリックとして正しいキーポイントの割合（PCK）<br>
+<image class='image' src="./pck.png"><br>
+ここで$\delta$は$\delta=\alpha max(H,W)$で与えられる距離閾値であり$0 < \alpha <1 $
 
 <h2>５．議論</h2>	
 <p>
