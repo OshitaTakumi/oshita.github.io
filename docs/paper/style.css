@@ -130,7 +130,7 @@ header #logo p {
 header #icon  {
 	position: absolute; z-index: 1;
 	width: 75%;		/*ロゴの幅*/
-	left: 20%;		/*headerに対して、左からの配置場所*/
+	left: 23%;		/*headerに対して、左からの配置場所*/
 	top: 65%;		/*headerに対して、上からの配置場所*/
 }
 
@@ -764,7 +764,7 @@ html, body {
 	padding-top: 13%;	/*上に空ける余白。上下間のバランスをとって下さい。*/
 }
 .icon {
-	left: 10%;			/*headerに対して、左からの配置場所*/
+	left: 100%;			/*headerに対して、左からの配置場所*/
 	padding-top: 13%;	/*上に空ける余白。上下間のバランスをとって下さい。*/
 }
 
