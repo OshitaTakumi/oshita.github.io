@@ -200,13 +200,28 @@ YFCC15MというCLIPの学習に用いられたデータのサブセットから
 <image class='image' src="./zs_result.png">
 
 <h3>キーポイントローカリゼーション</h3>
+<p>
 メトリックとして正しいキーポイントの割合（PCK）<br>
+ここで$\delta$は$\delta=\alpha max(H,W)$で与えられる距離閾値であり,$\alpha$は0~1．(H,W)はBBサイズ．
+実験結果より，ゼロショットのみならず弱教師を用いる既存手法に対しても有意差あり．データセット次第ではあるが
+zeroショットから更にも一歩を踏み出せる場合がある．<br>
 <image class='image' src="./pck.png"><br>
-ここで$\delta$は$\delta=\alpha max(H,W)$で与えられる距離閾値であり$0 < \alpha <1 $
+<image src="./localize_leypoint.png" class="image">
+</p>
+
+<h3>参照表現の理解</h3>
+RefCOCO,RefCOCO+,RefCOCOgの３つのデータセットで実験．
+各々，COCOとその一意のオブジェクトを参照する表現からなりBBもついている．
+RefCOCO+は外観に関する表現を含んでおり，RefCOCO,RefCOCOgは物体の関係性を参照表現に含む．
+RefCOCOとRefCOCO+のテストセットは2つに分割されており、testAとtestBにはそれぞれ人物と非人間のみ
+含まれる．
+<image src="./rec.png" class="image"></image>
 
 <h2>５．議論</h2>	
 <p>
-	
+	画像に対して赤丸を追加するだけでVLMからオブジェクトに対する有益な情報を獲得できるが，問題点も存在する．
+	COCOにおいて赤丸を付けた画像に対して，｛男性，女性，行方不明者，殺人容疑者｝のワードに対してスコアリングすると
+	zsに比べて行方不明者，殺人容疑者のスコアが上昇する傾向にある．
 </p>
 
 
