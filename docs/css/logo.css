@@ -6,9 +6,9 @@
 
 .logo-wrapper {
     max-width: max-content;
-	position: absolute; z-index: 1;
     float: left;
-    left: 35%;	
+	position: absolute; z-index: 1;
+    /* left: 35%;	 */
     margin: 0 auto;
 	width: 75%;		
     top: 25%;	
@@ -20,7 +20,7 @@
 	position: absolute; z-index: 1;
 	width: 75%;		/*ロゴの幅*/
 	top: 60%;		/*headerに対して、上からの配置場所*/
-    left: 55%;
+    left: 48.5%;
 }
 
 
@@ -29,7 +29,7 @@
 	position: absolute; z-index: 1;
     width: 75%;		/*ロゴの幅*/
 	top: 60%;		/*headerに対して、上からの配置場所*/
-    left: 45%;		/*headerに対して、左からの配置場所*/
+    left: 51.0%;		/*headerに対して、左からの配置場所*/
 }
 
 
