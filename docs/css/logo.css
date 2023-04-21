@@ -8,8 +8,8 @@
     max-width: max-content;
     float: left;
 	position: absolute; z-index: 1;
-    /* left: 35%;	 */
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    left: 35%;	
 	width: 75%;		
     top: 25%;	
 }
