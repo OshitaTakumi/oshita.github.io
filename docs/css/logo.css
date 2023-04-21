@@ -29,8 +29,10 @@ header #logo img {
     top: 40%;
     left: 50%;
     transform: translate(-40%,-50%);
-    width: 50%;
-    height: 30%;
+    /* width: 50%;
+    height: 30%; */
+    width: 90%;
+    height: auto;
 }
 
 
@@ -43,9 +45,7 @@ header #mail{
 
 header #git{
 	position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    inset: 50 50 50 50;
 } 
 
 header a {
