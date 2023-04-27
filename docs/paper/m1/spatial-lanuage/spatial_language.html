@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>Spatial-Language Attention Policies for Efficient Robot Learning 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Spatial-Language Attention Policies for Efficient Robot Learning 要約">
+<link rel="stylesheet" href="../../../css/style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="Visual prompt"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="../../../my_app.html">個人製作アプリ</a></li>
+			<li><a href="../../../b3.html">学部３年</a></li>
+			<li><a href="../../../b4.html">学部４年</a></li>
+			<li><a href="../../../404.html">修士１年</a></li>
+			<li><a href="../../../404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： 2023<br>
+	・ <a href="https://arxiv.org/abs/2304.11235">リンク</a><br> 
+	・ <a href="https://robotslap.github.io">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	Trandformerを用いたロボットの意思決定のための空間表現の構築及び訓練方法に関する研究．
+	ロボットは様々な環境でクラッタ(周囲の不要な電波のこと)に強く，かつデータ効率が良いなど
+	異なるシチュエーションにも微調整をするだけで即座に対応できる能力が求められる．<br>
+	この論文ではこれに対してSLAP(Spatial Language Attention Policies)を提案．SLAPは、3次元
+	トークンを入力表現として用い、単一のマルチタスク、言語条件付き行動予測ポリシーを学習．
+	言語と空間情報を組み合わせた入力空間で動作する、「注意駆動型ロボットポリシー」の導入により
+	先行研究と比較し，未知物体が導入された場合のタスク成功率を30%改善した，
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<p>
+	※事前知識：動画に対してキャプション付け：ビデオの長さ，キャプション付けを行うビデオセグメントの決定が必要．<br>
+	明示的，暗黙的の２種類の常識知識をモデルに統合する．<br>
+		<image class='image' src="./video_caption_model.png">
+	<h3>明示的知識の抽出</h3>
+	<p>
+		必要なのはスニペットとその前後のスニペットとの対応関係．BARTを用いたCOMETを使用して明示的知識を基盤モデルから抽出．
+		これをSBERTによってエンコードする，すべて事前学習済み．
+	</p>
+	<h3>暗黙的知識の抽出</h3>
+	<p>
+		The Pileデータセットで事前学習されたGPT-Neoを使用．GPTの出力を暗黙的事前知識として，入力に対して出力された行動予測文章を
+		SBERTによりエンコード
+	</p>
+	<h3>アクション-オブジェクト予測器</h3>
+	<p>
+		動画のスニペットは前後で強い関係性を持つはずである．そこで行動・物体予測器$fa$を用いる．$fa$では動画中のオブジェクトに対して
+		CLIPで検出．データセットに対して行動が与えられていることが前提．前のスニペットとの情報量に対してはMultiHeadAttensionを行うことで解消．
+		以下のように定式化可能．ただしnを2値のスニペットを表すとする．
+		$$
+			V_i = V \oplus \bm{n}_i
+		$$
+		$$
+			\bm{a}_i = f_a{concat(V_i,\bm{m}_{i-1},\bm{g}_{i-1},\bm{h}_{i-1})}
+		$$
+		$$
+			L_{actobj} = L_{}
+		$$
+		$$
+			V_e^{n} = V_e^{(n-1)} + MultiHead(V_e^{(n-1)},V_e^{(n-1)},V_e^{(n-1)}) 
+		$$
+		<image class='image' src="./detail.png"></image>
+	</p>
+
+</p>
+
+
+
+<h2>４．有効性の証明</h2>
+<p>
+	Alfred,ActivityNet Captionsを用いて実験． また，動画の種類について定義．
+	<ul>
+		<li>ParagraphLevel：スニペットの推定や監視を行わない（潜在的なまま）設定</li>
+		<li>Sentence-Level: スニペットを推定し、密なビデオキャプションと同様にキャプションに活用することを学習するもの</li>
+	</ul>
+
+	ALFREDデータセットは、行動、振る舞い、物体を人間の言語と結びつけるためのベンチマーク.
+	このデータセットはAI2-THOR 2.0上の対話型視覚環境で構築されている．<br>
+	ActivityNet Captions Datasetは各動画は時間的に注釈された一連の文章を持ち、各文章は発生したイベントを記
+	述する動画のセグメントに対応する．<br>
+	生成した命令文について実験，評価手法には，BLEU, METEOR,CIDErを用いて評価．Alfredに結果は以下の通り．<br>
+	<image class="'image" src="./alfred_result.png"><br>
+
+	<h3>密なビデオキャプションにおける実験結果</h3>
+	一般性を説明するために、我々はまた、密なビデオキャプション問題の設定において、ActivityNet Captionsデータセットで
+	提案手法の方法の性能を実証した。以下に定性的な実験結果，生成された命令文の評価実験結果を示す<br>
+	<image class='image' src="./activitynet_result.png">
+	<image class='image' src="./activitynet_centence_result.png">
+	
+	<h3>常識知識に関するユーザー実験</h3>
+	常識知識の改善を定量化することを目的とする実験．密なビデオキャプションの設定において文章AかBのどちらがいいか，それとも両者ともいい，
+	もしくは悪いかについて答えてもらった．指示生成では10件、密なビデオキャプションでは12件の回答を収集．インストラクション生成では82.6%、
+	dense video captioningでは54.5%の文章が、常識知識を加えたモデルの文章と同等かそれ以上であると判定された．
+	
+</p>
+
+<h2>５．議論</h2>	
+<p>
+	特になし
+</p>
+
+
+<h2>感想</h2>	
+<p>
+	暗黙的，明示的知識を事前学習済モデルから抽出して，キャプション付けに対して汎化できた例．
+	CLIPが対応していないようなドメインの画像についてはCLIPのfinu-tuningで対処可能なのかは
+	たまた別のアプローチが必要なのかについては気になるところ．
+</p>
+
+
+</section>
+
+
+</main>
+
+<footer>
+
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
