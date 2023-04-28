@@ -26,7 +26,7 @@
 <header>
 
 <div id="logo">
-<h1><a href="index.html"><img src="images/logo.png" alt="Learning with Noisy labels via Self-supervised Adversarial Noisy Masking
+<h1><a href="index.html"><img src="images/logo.png" alt="summary
 	"></a></h1>
 </div>
 
@@ -81,7 +81,7 @@
 	具体的には，誤予測したサンプルの特徴マップに差分があり，cleanデータで学習した得t票マップは対象物体について
 	注目しているが，noiseラベルで学習したデータは対象物体ではなく背景部分に注目しているといった傾向があった．
 	これを利用して敵対的ノイズマスキングと呼ばれる新たなロバストな学習アプローチを提案している．<br>
-	<image src="./map.png"></image>
+	<image class="image" src="./map.png"></image>
 	</p>
 
 <h2>２．先行研究との差分</h2>
@@ -94,7 +94,7 @@
 <p>
 	入力画像の特定の部分のみマスキングすることによって多様な活性化マップを制止絵師，認識バイアス
 	を緩和するモデルを明示的に正則化する手法．これについてnoiseデータを用いたtrainingについても調査した．<br>
-	<image src="./archtect.png"></image>
+	<image class="image" src="./archtect.png"></image>
 <h3>Adversarial Noisy Masking</h3>
 	各サンプル$x_i$から期待値最大化アルゴリズムによって得られたCEロスに対してガウスコンポーネントが2のGMMにあてはめる．
 	これはdevidemixと同じであると思われる．<br>
@@ -117,14 +117,14 @@
 <p>
 	cifar10,cifar100,clothing1mで実験．<br>
 	対象ノイズの入ったcifar10,100における実験結果<br>
-	<image src="./result1.png"><br>
+	<image class="image" src="./result1.png"><br>
 	対象ノイズの入ったcifar10における実験結果<br>
-	<image src="./result2.png"><br>
+	<image class="image" src="./result2.png"><br>
 	clothing1mにおける実験結果<br>
-	<image src="./result3.png"><br>
+	<image class="image" src="./result3.png"><br>
 	その他，cifar10,100においてsanmの各モジュールを機能させた場合や，他の手法と組み合わせた場合の実験結果<br>
-	<image src="./result4.png"><br>
-	<image src="./result5.png"><br>
+	<image class="image" src="./result4.png"><br>
+	<image class="image" src="./result5.png"><br>
 </p>
 
 <h2>５．議論</h2>	

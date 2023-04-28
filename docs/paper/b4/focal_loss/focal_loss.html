@@ -15,7 +15,7 @@
 <header>
 
 <div id="logo">
-<h1><a href="index.html"><img src="images/logo.png" alt="Focal Loss for Dense Object Detection"></a></h1>
+<h1><a href="index.html"><image class="image" src="images/logo.png" alt="summary"></a></h1>
 </div>
 
 </header>
@@ -73,9 +73,9 @@
 <h2>３．技術や研究のキモ</h2>
 <p>detectionに対する部分は省略，分類タスクに関する部分のみまとめる．
 <h3>2クラス分類想定の通常のCrossEntropy</h3>
-<img src="./ce.png" alt="Error">
+<image class="image" src="./ce.png" alt="Error">
 <h3>Focal loss</h3>
-<img src="./focal_loss.png" alt="Error">
+<image class="image" src="./focal_loss.png" alt="Error">
 通常のCrossEntropyの式に対してγというハイパラを導入．正解クラスに対する予測確率が大きいようなデータのロスを下げる．
 またαはしばしば不均衡対策として損失関数に用いられるパラメータ．よくあるケースとしては各クラスのデータ数の逆数に設定される．
 </p>
