@@ -153,18 +153,23 @@ Referring Expression Comprehension 要約">
 
 <h2>４．有効性の証明</h2>
 <p>
-	
+	RefCOCOg，RefCOCO、RefCOCO+，RefGTAに対するゼロショット性能で実験を行った．
+	ReCLIPには事前学習済みのCLIP(Resnet50x16，vit_b_16)を使用比較対象はGradCAM．<br>
+	<image class="image" src="./ref_result.png"><br>
+	<image class="image" src="./gta_result.png">
 </p>
 
 <h2>５．議論</h2>	
 <p>
-
+	CLIPはやはり空間的情報については学習していないと思われる．オブジェクトを示す言葉にのみ
+	注目しがちであるため，このような空間情報を表すキャプションを付けた画像で事前学習or
+	VQAのような物事の関係性について直接学習させるモデルの使用で解決できそう．
 </p>
 
 
 <h2>感想</h2>	
 <p>
-	
+	3章が読みにくい．
 </p>
 
 
