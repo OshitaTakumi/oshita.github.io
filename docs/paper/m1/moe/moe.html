@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>Uni-Perceiver-MoE: Learning Sparse Generalist Models with Conditional MoEs 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Uni-Perceiver-MoE: Learning Sparse Generalist Models with Conditional MoEs 要約">
+<link rel="stylesheet" href="../../../css/style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="MoE"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="b3.html">個人製作アプリ</a></li>
+			<li><a href="b3.html">学部３年</a></li>
+			<li><a href="b4.html">学部４年</a></li>
+			<li><a href="404.html">修士１年</a></li>
+			<li><a href="404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： NeurIPS2022<br>
+	・ <a href="https://arxiv.org/abs/2206.04674">リンク</a><br> 
+	・ <a href="https://github.com/fundamentalvision/Uni-Perceiver">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	さまざまなタスクを１つの重みで共有するジェネラルモデルは以前から研究が進んでいた．
+	しかし，タスク間でパラメータに干渉する問題があった．<br>
+	この問題に対して勾配の観点から問題を定量化，評価を行った．また下流タスクにおいて計算コストを
+	削減しつつこれを実現．
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	タスク干渉問題を勾配方向の観点から分析
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<p>
+	<h3>タスク間損失</h3>
+	タスク間でパラメータ干渉が起きているかの指標．
+	i番目のタスクに対してパラメータ更新を行った場合にj番目のタスクの損失の変化量を示す．
+	また，これを用いてタスク間の干渉を表したものが二つ目の式
+	<image class="image" src="./change_of_loss.png"></image>
+	<image class="image" src="./task_loss.png"></image><br>
+	この評価指標を用いてvision transformerの異なる層のFFNにおけるタスク間の干渉について調べた結果が以下の通り．
+	<image class="image" src="./result1.png"></image>
+	
+</p>
+
+
+<h2>４．有効性の証明</h2>
+<p>
+
+</p>
+
+
+
+<h2>５．議論</h2>	
+<p>
+	
+</p>
+
+
+<h2>感想</h2>	
+<p>
+	
+</p>
+
+
+
+</section>
+</main>
+<footer>
+
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
