@@ -87,13 +87,52 @@
 	<image class="image" src="./task_loss.png"></image><br>
 	この評価指標を用いてvision transformerの異なる層のFFNにおけるタスク間の干渉について調べた結果が以下の通り．
 	<image class="image" src="./result1.png"></image>
-	
+
+	<h3>Conditional Mixture-of-Experts</h3>
+	入力シーケンスから得られるトークン$x_i$をE個のLinear層のどれを通すのかについて決定する．(routing)<br>
+	そして最終的な出力は加重和として次のように表される．ここで$\bm{W}_g$はroutingに用いられる学習可能な重み．
+	$\bm{W}_e$は選択されたlinear層の重みである．
+	<image class="image" src="./routing.png"></image>
+	<image class="image" src="./output.png"></image>
+	<h3>Rooting Strategy</h3>
+	<h4>Token level</h4>
+	先行研究のバニラMoEと同様にトークン表現を直接使用
+	<image class="image" src="./token_level.png"></image>
+
+	<h4>Context level</h4>
+	類似した表現を持つトークンはタスク間でも出現する可能性あり．これに対してExpartの判断はタスクの干渉を緩和するために異なるはずである．
+	gatingの信頼性の高い判断のために，グローバルコンテキストとローカルトークン表現の組合せを探索する．ここでattnpoolはattension poolingを意味する．
+	<image class="image" src="./context_level.png"></image>
+
+	<h4>Modality level</h4>
+	現在では、異なるモダリティの入力に対して独立したパラメータを持つモダリティ固有のエンコーダを使用するのが一般的．
+	これに触発されトークンのモダリティもルーティングに活用．ここで$id_{modal}$はトークン$x_i$のモダリティインデックスを示す．
+	<image class="image" src="./modality_level.png"></image>
+
+	<h4>Task level</h4>
+	タスク干渉に対してタスク情報も活用する．ここで$id_{task}$はトークンのタスクインデックスを示す．
+	<image class="image" src="./task_level.png"></image>
+
+	<h3>Attribute routing</h3>
+	ジェネラルモデルとしての汎化性能を保ちつつ，現在のタスク，モダリティ情報を考慮するためにゲート決定のためのトークン属性を追加．
+	これはタスクによって定まるものであり，詳細はこの論文の付録に載っている．大まかに考えると<br>
+	トークン，コンテキストー＞データ依存　モダリティ，タスクレベルー＞データ非依存
+	<image class="image" src="./attribute_routing.png"></image>
+	<image class="image" src="./8binary.png"></image>
 </p>
 
 
 <h2>４．有効性の証明</h2>
 <p>
+	<h3>条件付きMoEにおけるrouting別の性能比較</h3>
+	ImageNet-1Kによる画像分類，COCO Captionによる画像キャプション，Books&WikiのMasked Language Modelingの3つのタスクについて
+	学習と検証を行った．
+	<image class="image" src="./result2.png"></image> 
 
+	<h3>条件付きMoEにおけるrouting別の性能比較</h3>
+	ImageNet21k：分類タスク， Kinetics-700，Moments in Time：ビデオ分類，BookCorpus&English Wikipedia：言語モデリングタスク<br>
+	その他様々なデータセットを用いて大規模に実験を行っている．詳細は論文の付録を参考．
+	<image class="image" src="./result3.png"></image>
 </p>
 
 
