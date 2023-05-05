@@ -119,6 +119,19 @@ header #logo {
 	margin: 0 auto;		/*ロゴを左右中央に配置*/
 }
 
+header #logo #mail{
+	position: absolute; z-index: 1;
+	width: 75%;		/*ロゴの幅*/
+	left: 56%;		/*headerに対して、左からの配置場所*/
+	top: 93%;		/*ロゴを左右中央に配置*/
+}
+header #logo #git{
+	position: absolute; z-index: 1;
+	width: 75%;		/*ロゴの幅*/
+	left: 37%;		/*headerに対して、左からの配置場所*/
+	top: 93%;		/*ロゴを左右中央に配置*/
+}
+
 /*トップページのロゴ画像*/
 .home header #logo {
 	position: absolute; z-index: 1;
