@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Mathjaxの設定．これで数式のインライン形式が生成可能 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+		inlineMath: [['$','$']]
+	  }
+	});
+</script>
+
+<meta charset="UTF-8">
+<title>RegionCLIP: Region-based Language-Image Pretraining 要約</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="RegionCLIP: Region-based Language-Image Pretraining 要約">
+<link rel="stylesheet" href="../../../css/style.css">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+
+<div id="logo">
+<h1><a href="index.html"><img src="images/logo.png" alt="Visual prompt"></a></h1>
+</div>
+
+</header>
+
+<!--開閉ブロック-->
+<div id="menubar">
+
+<nav>
+	<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="selh-intro.html">自己紹介</a></li>
+	<li><a href="">過去の研究</a>
+		<ul>
+			<li><a href="../../../my_app.html">個人製作アプリ</a></li>
+			<li><a href="../../../b3.html">学部３年</a></li>
+			<li><a href="../../../b4.html">学部４年</a></li>
+			<li><a href="../../../404.html">修士１年</a></li>
+			<li><a href="../../../404.html">修士２年</a></li>
+		</ul>
+	</li>
+	<li><a href="club.html">学外活動</a></li>
+	<li><a href="contact.html">お問い合わせ</a></li>
+	</ul>
+</nav>
+
+</div>
+<!--/#menubar-->
+
+<main>
+
+<section>
+
+<h2>論文</h2>
+<p>・ Year ： 2023<br>
+	・ <a href="https://arxiv.org/abs/2112.09106">リンク</a><br> 
+	・ <a href="https://github.com/microsoft/RegionCLIP">github</a>
+</p>
+
+<h2>１．どんなものか</h2>
+<p>
+	大規模モデルであるCLIPは画像全体とテキストを照合するように訓練されているため，物体の位置情報のような
+	画像の一部領域とテキストの一部との対応関係については学習していない．これに対してCLIPを拡張し，領域レベル
+	の視覚表現を学習させたregionCLIPでこの問題を解決した．具体的には，事前学習で画像領域とテンプレートキャプション
+	が一致するように学習させている．
+	実験ではCOCOとLVISでベンチマーク．
+
+</p>
+
+<h2>２．先行研究との差分</h2>
+<p>
+	OVRは語彙オブジェクト検出を合成することによって、新しいカテゴリのローカライズ性能を向上させることを探求．<br>
+	ViLDは事前学習済みCLIPモデルから視覚的特徴を抽出し，物体検出について学習しているが物体ラベルとBBが必要．<br>
+	OVRとの相違点；regionCLIPは事前学習されたCLIPによって生成された’疑似’局所テキストペアを用いる．<br>
+	ViLDとの相違点；本手法は局所的な情報を学習するための事前学習に注力しているため，ゼロショットで他のタスクに
+	単葉する場合，そのサポートが可能．
+</p>
+
+<h2>３．技術や研究のキモ</h2>
+<p>
+	視覚意味空間rから抽出した視覚領域表現V(l,r)とテキスト表現L(t)をマッチングさせることを目的としている．
+	Vがビジョンエンコーダを意味し，Lが言語エンコーダを意味する.
+	<image class="image" src="./way_comparison.png"></image>
+
+	<h3>視覚的な領域表現</h3>
+	既存研究の人間が注釈したオブジェクトのバウンディングボックスで事前学習したRPNを用いて画像領域$\{r_i\}_{i=1,2,...,N}$を取得する．
+	この&r&の中から代表領域$v_i$を既存研究のRoIAlignのような特徴プーリング法を用いて抽出．
+	<h3>意味領域表現</h3>
+	一つの画像に対してセマンティックな町域は複数存在しており，すべてにカテゴリ付けするコストはない．
+	これに対して局所概念を網羅的にカバーするような大規模概念プールを構築．このプールを用いて局所情報は
+	以下の２津の手順で作成される．
+	(1) 各概念の
+	短い文章をプロンプトテンプレート（CLIP [37]のプロンプト
+	など）に埋めて作成する。例えば、「凧」という概念は「凧
+	の写真」に変換	<br>
+	(2) 得られたテキスト記述は、さらに事前学習済みの言語エンコーダLを用いて意味表現に符号化<br>
+
+	<h3>領域とテキストのペアのアライメント</h3>
+	テキストと画像埋め込みのcos類似度を測定，スコアとして用いる．
+	また局所的な視覚特徴とテキストに対して以下の損失，予測確率を用いている．
+	また，ある原画像の特定領域を表している画像と原画像どうしはcontrastive loss的にはノイズ扱いになるが
+	完全に異なる画像ではないため，KLlossを導入している．
+	<image class="image" src="./score.png"></image>
+	<image class="image" src="./loss.png"></image>
+	<image class="image" src="./pred.png"></image>
+	<image class="image" src="./kl_loss.png"></image>
+	<image class="image" src="./loss_total.png"></image>
+
+</p>
+
+
+
+<h2>４．有効性の証明</h2>
+<p>
+	事前学習にはむConceptual Caption dataset (CC3M)を使用する．またAblation StudyではCOCO Captionを使用．zero-shotの性能評価に
+	COCO検出データセットとLVISデータセットを用いる．事前訓練で使用したRPNは、LVISデータセットの基本カテゴリで訓練されている．
+	また，デフォルトの生徒モデルと教師モデルは、事前学習済みのCLIPからResNet50である．
+	<image class="image" src="./supervised_coco_lvis.png"></image>
+	<image class="image" src="./zero-shot_coco_lvis.png"></image>
+	また，オブジェクト毎のCOCOにおけるZero-shot推論結果は以下の通り．
+	表は事前学習の結果を表し，領域とテキストのペアを使用することで、妥当な性能が得られることが確認．
+	<image class="image" src="./ablation_study.png"></image>
+	<image class="image" src="./abration_zero-shot_coco.png"></image>
+	<image class="image" src="./abration_loss.png"></image>
+</p>
+
+<h2>５．議論</h2>	
+<p>
+	CLIPのvision Encoderは更新しているが，test Encoderは更新していない．そこについては改良のよりがあるかも<br>
+	またCC3M等データセット固有のバイアスについては，fine-tuningの際に好ましくない物を引き継ぐ可能性があるので注意
+</p>
+
+
+<h2>感想</h2>	
+<p>
+	CLIPを用いた人間の注釈を用いずに領域テキストペアを関連付けるスケーラブルなアプローチではあるものの，
+	CLIPが持ち合わせないドメインにおいてはそのまま活用することはできない．
+</p>
+
+
+</section>
+
+
+</main>
+
+<footer>
+
+
+<div class="copy">
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</div>
+
+</footer>
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+</div>
+<!--/#container-->
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--パララックス（inview）-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js"></script>
+<script src="js/jquery.inview_set.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="js/main.js"></script>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</body>
+</html>
